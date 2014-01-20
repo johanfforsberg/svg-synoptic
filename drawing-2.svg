@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-stylesheet href="styles.css" type="text/css"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="drawing-2.svg">
+  <script
+     xlink:href="onload.js"
+     id="script3082" />
+  <script
+     xlink:href="svg.js"
+     id="script3016" />
+  <script
+     xlink:href="script.js"
+     id="script3014" />
+  <defs
+     id="defs4">
+    <filter
+       id="outline"
+       x="-50%"
+       y="-50%"
+       width="200%"
+       height="200%">
+      <feMorphology
+         result="offset"
+         in="SourceGraphic"
+         operator="dilate"
+         radius="10"
+         id="feMorphology4039" />
+      <feColorMatrix
+         result="drop"
+         in="offset"
+         type="matrix"
+         values="0 0 0 0 0                  0 0 0 0 0                  0 0 0 0 0                  0  0  0  0.25  0"
+         id="feColorMatrix4041" />
+      <feBlend
+         in="SourceGraphic"
+         in2="drop"
+         mode="normal"
+         id="feBlend4043" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="369.70288"
+     inkscape:cy="787.65764"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1600"
+     inkscape:window-height="881"
+     inkscape:window-x="0"
+     inkscape:window-y="19"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g4097">
+      <title
+          id="title3006">a round device</title>
+      <desc
+         id="desc4101">device=hej/med/ost</desc>
+      <path
+         id="circle"
+         d="m 474.28571,367.36218 c 0,43.78829 -32.29946,79.28572 -72.14286,79.28572 -39.8434,0 -72.14286,-35.49743 -72.14286,-79.28572 0,-43.78829 32.29946,-79.28571 72.14286,-79.28571 39.8434,0 72.14286,35.49742 72.14286,79.28571 z"
+         style="fill:#ffcc00;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-opacity:1"
+         transform="translate(-25.714286,-95.714286)">
+      </path>
+    </g>
+    <g
+       id="slit">
+      <title
+          id="title3006">slit</title>
+      <desc
+         id="desc3027">device=fisk/och/kex</desc>
+      <path
+         sodipodi:type="arc"
+         style="fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-opacity:1"
+         id="path3253"
+         sodipodi:cx="171.78572"
+         sodipodi:cy="90.576469"
+         sodipodi:rx="22.5"
+         sodipodi:ry="11.785714"
+         d="m 194.28572,90.576469 a 22.5,11.785714 0 1 1 -45,0 22.5,11.785714 0 1 1 45,0 z"
+
+         onclick="Stuff.toggle(evt)"
+         transform="translate(-5,-30)" />
+      <rect
+         onclick="console.log('ipsadasd')"
+         y="120.93362"
+         x="149.5049"
+         height="145.71428"
+         width="33.847355"
+         id="top"
+         style="fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:0.56986105;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
+        <desc
+           id="desc3008">flejsan</desc>
+        <title
+           id="title3006">slit upper</title>
+        <animateMotion
+           class="ON"
+           path="M 0 0 V -30"
+           dur="1s"
+           begin="indefinite"
+           id="animateMotion4272" />
+        <animateMotion
+           class="OFF"
+           path="M 0 -30 V 0"
+           dur="1s"
+           begin="indefinite"
+           id="animateMotion4274" />
+      </rect>
+      <rect
+         style="fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:0.56986105;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="bottom"
+         width="33.847355"
+         height="145.71428"
+         x="149.5049"
+         y="265.21933"
+         inkscape:label="#rect2985">
+        <title
+           id="title3029">slit lower</title>
+        <animateMotion
+           class="ON"
+           path="M 0 0 V 30"
+           dur="1s"
+           begin="indefinite"
+           id="animateMotion4279" />
+        <animateMotion
+           class="OFF"
+           path="M 0 30 V 0"
+           dur="1s"
+           begin="indefinite"
+           id="animateMotion4281" />
+      </rect>
+    </g>
+    <rect
+        style="fill: blue;fill-opacity:1;stroke:#000000;stroke-opacity:1"
+        class="status-OFF"
+        id="rect4093"
+        width="105"
+        height="105.71429"
+        x="497.85715"
+        y="228.07646"
+        rx="10"
+        ry="10">
+        <title
+           id="title3006">A square device</title>
+      <desc
+          id="desc4095">device=another/fake/device</desc>
+    </rect>
+  </g>
+</svg>
