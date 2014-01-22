@@ -1,0 +1,28 @@
+body {
+    overflow-x: hidden;
+    margin: 0;
+}
+
+#synoptic {
+    padding: 0;
+}
+
+#svg2 {
+
+}
+
+#overview {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.05);
+    border-top: 1px solid #ccc;
+}
+
+#view-rect {
+    background-color: rgba(0,0,0,0.1);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+}

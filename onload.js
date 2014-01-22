@@ -1,7 +1,15 @@
 window.onload = function () {
 
-    // Find and setup any elements that correspond to devices
+    function setupTango() {
+        console.log("setupTango");
+        if (window.parent.TANGO && window.parent.Stuff) {
+            window.parent.TANGO.setup();
+        } else {
+            setTimeout(setupTango, 1000);
+        }
+    }
 
-    Stuff.findDevices();
+    window.Stuff = window.parent.Stuff;
+    window.TANGO = window.parent.TANGO;
 
 };

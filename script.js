@@ -1,7 +1,9 @@
 var Stuff = {
 
     findDevices: function () {
-        var descs =  Array.prototype.slice.call(document.querySelectorAll("desc"));
+        var svg = document.getElementById("svg2").contentDocument;
+        var descs =  Array.prototype.slice.call(svg.querySelectorAll("desc"));
+        console.log(descs);
         descs.forEach(function (desc) {
             var result = /device=(.*)/.exec(desc.textContent);
             if (result) {
@@ -21,7 +23,8 @@ var Stuff = {
 
     getElementsByDeviceName: function (devname) {
         var els = [];
-        var descs =  Array.prototype.slice.call(document.querySelectorAll("desc"));
+        var svg = document.getElementById("svg2").contentDocument;
+        var descs =  Array.prototype.slice.call(svg.querySelectorAll("desc"));
         descs.forEach(function (desc) {
             var result = /device=(.*)/.exec(desc.textContent);
             if (result && result[1] == devname) {

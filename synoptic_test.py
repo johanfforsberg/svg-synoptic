@@ -18,9 +18,9 @@ import random
 import sys
 import time
 
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import Qt, QObject, pyqtSlot, QUrl
-from PyQt4.QtGui import QApplication, QScrollArea
+from PyQt4.QtGui import QApplication, QScrollArea, QWidget
 from PyQt4.QtWebKit import QWebView, QWebPage
 
 
@@ -28,12 +28,18 @@ class TangoSomething(QtCore.QObject):
 
     """Interface between webview and Tango"""
 
-    def __init__(self, frame, parent=None):
+    def __init__(self, frame, parent=None, activate_devices=True):
         self.frame = frame
-        self.open = False
+        self.activate_devices = activate_devices
+
         self._devices = dict()
         self.selected_device = None
         super(TangoSomething, self).__init__(parent)
+
+    @QtCore.pyqtSlot()
+    def setup(self):
+        if self.activate_devices:
+            self.frame.evaluateJavaScript("Stuff.findDevices()")
 
     @QtCore.pyqtSlot(str)
     def select(self, devname):
@@ -45,7 +51,6 @@ class TangoSomething(QtCore.QObject):
     @QtCore.pyqtSlot(str)
     def toggle(self, devname):
         direction = "OFF" if self._devices[devname] == "ON" else "ON"
-        print "toggle", devname, self.open, "->", direction
         self.frame.evaluateJavaScript("Stuff.runAnim('%s', '%s')" %
                                       (devname, direction))
         self.set_status(devname, direction)
@@ -113,26 +118,75 @@ class WorkThread(QtCore.QThread):
             on = not on
 
 
+class SynopticWidget(QWidget):
+
+    def __init__(self):
+        super(SynopticWidget, self).__init__()
+        # self.create_view()
+        # self.create_view(False)
+        self.setup_ui()
+
+    def setup_ui(self):
+        hbox = QtGui.QHBoxLayout(self)
+        hbox.setContentsMargins(0, 0, 0, 0)
+        hbox.layout().setContentsMargins(0, 0, 0, 0)
+
+        top = QtGui.QFrame(self)
+        #top.setFrameShape(QtGui.QFrame.StyledPanel)
+        topbox = QtGui.QHBoxLayout(self)
+        topbox.setContentsMargins(0, 0, 0, 0)
+        topbox.layout().setContentsMargins(0, 0, 0, 0)
+
+        top.setLayout(topbox)
+        top.setContentsMargins(0, 0, 0, 0)
+        top.layout().setContentsMargins(0, 0, 0, 0)
+        topbox.addWidget(self.create_view())
+
+        # bottom = QtGui.QFrame(self)
+        # #bottom.setFrameShape(QtGui.QFrame.StyledPanel)
+        # bottombox = QtGui.QHBoxLayout(self)
+        # bottombox.setContentsMargins(0, 0, 0, 0)
+        # bottombox.layout().setContentsMargins(0, 0, 0, 0)
+
+        # bottom.setLayout(bottombox)
+        # bottom.setContentsMargins(0, 0, 0, 0)
+        # bottom.layout().setContentsMargins(0, 0, 0, 0)
+        # bottombox.addWidget(self.create_view(False))
+
+        splitter = QtGui.QSplitter(QtCore.Qt.Vertical)
+        splitter.addWidget(top)
+        # splitter.addWidget(bottom)
+
+        hbox.addWidget(splitter)
+        self.setLayout(hbox)
+
+    def create_view(self, use_tango=True):
+        view = ZoomingWebView(self)
+        view.setPage(LoggingWebPage())
+
+        svg = QUrl(sys.argv[1])
+        view.load(svg)
+
+        frame = view.page().mainFrame()
+        # frame.setScrollBarPolicy(Qt.Horizontal, Qt.ScrollBarAlwaysOn)
+        # frame.setScrollBarPolicy(Qt.Vertical, Qt.ScrollBarAlwaysOn)
+
+        if use_tango:
+            self.tango = TangoSomething(frame)
+            frame.addToJavaScriptWindowObject('TANGO', self.tango)
+        return view
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
-    view = ZoomingWebView()
-    view.setPage(LoggingWebPage())
+    synoptic = SynopticWidget()
 
-    svg = QUrl(sys.argv[1])
-    view.load(svg)
-
-    frame = view.page().mainFrame()
-    frame.setScrollBarPolicy(Qt.Horizontal, Qt.ScrollBarAlwaysOn)
-    frame.setScrollBarPolicy(Qt.Vertical, Qt.ScrollBarAlwaysOn)
-
-    tango = TangoSomething(frame)
-    frame.addToJavaScriptWindowObject('TANGO', tango)
-
-    view.show()
-
-    thread = WorkThread(tango, ["fisk/och/kex", "hej/med/ost", "another/fake/device"])
-    thread.signal.connect(tango.set_status)
+    thread = WorkThread(synoptic.tango,
+                        ["fisk/och/kex", "hej/med/ost", "another/fake/device"])
+    thread.signal.connect(synoptic.tango.set_status)
     thread.start()
+
+    synoptic.show();
 
     app.exec_()
