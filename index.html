@@ -2,6 +2,7 @@
   <link rel="stylesheet" href="page.css" />
   <script type="text/javascript" src="svg.js"></script>
   <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+  <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
   <script type="text/javascript" src="js/rgbcolor.js"></script>
   <script type="text/javascript" src="js/StackBlur.js"></script>
   <script type="text/javascript" src="js/canvg.js"></script>
@@ -13,8 +14,11 @@
 <div id="synoptic">
 
   <object id="svg2" data="drawing-plain2.svg" type="image/svg+xml"></object>
+  <!-- <object id="svg2" data="Ackermann-complex.svg" type="image/svg+xml"></object> -->
   <!-- <img id="svg2" src="drawing-plain2.svg"/> -->
 
-  <canvas id="overview"></canvas>
+  <div id="overview-container">
+    <canvas id="overview"></canvas>
+  </div>
 
 </div>

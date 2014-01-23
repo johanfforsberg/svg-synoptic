@@ -89,11 +89,11 @@ class ZoomingWebView(QWebView):
         # Prevent the reload menu from opening. It will be useless anyway.
         self.setContextMenuPolicy(QtCore.Qt.PreventContextMenu)
 
-    def wheelEvent(self, event):
-        frame = self.page().mainFrame()
-        print event.delta()
-        scale = 1 + 0.1 * (event.delta() / 120)
-        frame.setZoomFactor(frame.zoomFactor() * scale)
+    # def wheelEvent(self, event):
+    #     frame = self.page().mainFrame()
+    #     print event.delta()
+    #     scale = 1 + 0.1 * (event.delta() / 120)
+    #     frame.setZoomFactor(frame.zoomFactor() * scale)
 
     def contentsSizeChanged(self, event):
         print(event)
@@ -114,7 +114,9 @@ class WorkThread(QtCore.QThread):
         while True:
             time.sleep(self.interval)
             new_status = "ON" if on else "OFF"
-            self.signal.emit(random.choice(self.devices), new_status)
+            if self.tango._devices:
+                self.signal.emit(random.choice(self.tango._devices.keys()),
+                                 new_status)
             on = not on
 
 
