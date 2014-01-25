@@ -30,7 +30,7 @@ window.onload = function () {
     }
 
     // setup Overview
-    updateZoomLevels();
+    updateZoomLevels(0);
     overview_el.width = container_el.offsetWidth;
     overview_el.height = overview_el.width / svg_ratio;
     var scale = overview_el.width / svg_width,
@@ -103,8 +103,9 @@ window.onload = function () {
     }
 
     // Update which objects are shown depending pon zoom level
-    function updateZoomLevels(zoomlevel) {
-        var z = zoomlevel || zoom / start_zoom,
+    function updateZoomLevels(fadetime) {
+        fadetime = fadetime >= 0? fadetime : 500;
+        var z = zoom / start_zoom,
             layers = Array.prototype.slice.call(svg.getElementsByTagName("g"));
         layers.forEach(function (l) {
             var gid = l.getAttribute("id"),
@@ -113,9 +114,9 @@ window.onload = function () {
                 var level = parseInt(match[1]) - 1;
                 console.log("layer", gid, level);
                 if (z >= level)
-                    l.style.display = "block";
+                    $(l).fadeIn(fadetime);
                 else
-                    l.style.display = "none";
+                    $(l).fadeOut(fadetime);
             }
         });
     };
@@ -145,7 +146,7 @@ window.onload = function () {
     // Event handlers
     events.zoom.add(throttle(function (zoom) {
         updateViewRect();
-        updateZoomLevels(zoom);
+        updateZoomLevels();
     }));
 
     events.scroll.add(throttle(function () {
