@@ -16,9 +16,7 @@ body {
     pointer-events: none;
     overflow: hidden;
     position: absolute;
-    outline: 1px solid #ccc;
     visibility: hidden;
-
 }
 
 #overview {
@@ -35,6 +33,7 @@ body {
     width: 25%;
     background: rgba(220,220,220,0.8);
     overflow: hidden;
+    outline: 1px solid #aaa;
 }
 
 #view-rect {

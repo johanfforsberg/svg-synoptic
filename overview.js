@@ -120,15 +120,37 @@ window.onload = function () {
         });
     };
 
+    // Wrap a function to only be run at most every <threshold>
+    // ms. Useful e.g. for slowing down mouse callbacks.
+    function throttle(fn, threshhold, scope) {
+        threshhold || (threshhold = 100);
+        var last, deferTimer;
+        return function () {
+            var context = scope || this,
+                now = +new Date, args = arguments;
+            if (last && now < last + threshhold) {
+                // hold on to it
+                clearTimeout(deferTimer);
+                deferTimer = setTimeout(function () {
+                    last = now;
+                    fn.apply(context, args);
+                }, threshhold);
+            } else {
+                last = now;
+                fn.apply(context, args);
+            }
+        };
+    }
+
     // Event handlers
-    events.zoom.add(function (zoom) {
+    events.zoom.add(throttle(function (zoom) {
         updateViewRect();
         updateZoomLevels(zoom);
-    });
+    }));
 
-    events.scroll.add(function () {
+    events.scroll.add(throttle(function () {
         updateViewRect();
-    });
+    }));
 
     // Clicking the overview should scroll the view there
     $(overview_el).on("click", function (evt) {
@@ -159,22 +181,20 @@ window.onload = function () {
     });
 
     // Panning the view
-    var start_coords;
-    $(synoptic_el).mousedown(function (evt) {
-        var offset = getOffset(svg_el);
-        start_coords = {x: evt.pageX - offset.left, y: evt.pageY - offset.top};
-    });
+    $(synoptic_el).on("mousedown", function (evt) {
+        var offset = getOffset(svg_el),
+            start_coords = {x: evt.pageX - offset.left,
+                            y: evt.pageY - offset.top};
 
-    $(synoptic_el).mousemove(function (evt) {
-        if (start_coords) {
+        $(synoptic_el).on("mousemove", function (evt) {
             setOffset(svg_el, evt.pageX - start_coords.x,
                       evt.pageY - start_coords.y);
             events.scroll.dispatch();
-        }
-    });
+        });
 
-    $(synoptic_el).mouseup(function (evt) {
-        start_coords = null;
+        $(synoptic_el).on("mouseup", function (evt) {
+            $(synoptic_el).off("mousemove mouseup");
+        });
     });
 
     // Show the SVG when everything is set up
