@@ -31,12 +31,13 @@ window.onload = function () {
 
     // setup Overview
     updateZoomLevels(0);
-    overview_el.width = container_el.offsetWidth;
-    overview_el.height = overview_el.width / svg_ratio;
-    var scale = overview_el.width / svg_width,
+    setSize(overview_el, container_el.offsetWidth,
+            container_el.offsetWidth / svg_ratio);
+    var overview_size = getSize(overview_el),
+        scale = overview_size.width / svg_width,
         oe = svg.cloneNode(true);
     oe.id = "overview-svg";
-    setSize(oe, overview_el.width, overview_el.height);
+    setSize(oe, overview_size.width, overview_size.height);
     overview_el.appendChild(oe);
 
     // view rectangle indicator
@@ -96,10 +97,8 @@ window.onload = function () {
             topleft = svg2overview(screen2svg({x: -offset.left, y: -offset.top})),
             width = scale * view_width / zoom,
             height = scale * view_height / zoom;
-        viewRect.style.left = Math.round(topleft.x) + "px";
-        viewRect.style.top = Math.round(topleft.y) + "px";
-        viewRect.style.width = Math.round(width) + "px";
-        viewRect.style.height = Math.round(height) + "px";
+        setOffset(viewRect, Math.round(topleft.x), Math.round(topleft.y));
+        setSize(viewRect, Math.round(width), Math.round(height));
     }
 
     // Update which objects are shown depending pon zoom level
