@@ -66,11 +66,6 @@ window.onload = function () {
         el.style.top = y + "px";
     }
 
-    function setOffsetDelta(el, dx, dy) {
-        var current = getOffset(el);
-        setOffset(el, current.left + dx, current.top + dy);
-    }
-
     // convert coordinates from svg to container
     function svg2overview(coords) {
         return {x: coords.x * scale, y: coords.y * scale};
