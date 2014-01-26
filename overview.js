@@ -111,12 +111,12 @@ window.onload = function () {
             var gid = l.getAttribute("id"),
                 match = /layer(\d+)/.exec(gid);
             if (match) {
-                var level = parseInt(match[1]) - 1;
-                console.log("layer", gid, level);
+                var level = parseInt(match[1]) - 1, $l = $(l);
+                $l.stop();  // let's not pile animations on each other
                 if (z >= level)
-                    $(l).fadeIn(fadetime);
+                    $l.fadeIn(fadetime);
                 else
-                    $(l).fadeOut(fadetime);
+                    $l.fadeOut(fadetime);
             }
         });
     };
@@ -188,6 +188,7 @@ window.onload = function () {
                             y: evt.pageY - offset.top};
 
         $(synoptic_el).on("mousemove", function (evt) {
+
             setOffset(svg_el, evt.pageX - start_coords.x,
                       evt.pageY - start_coords.y);
             events.scroll.dispatch();
