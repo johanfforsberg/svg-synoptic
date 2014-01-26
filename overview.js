@@ -158,32 +158,33 @@ window.onload = function () {
     });
 
     // Zooming the view
-    $(synoptic_el).mousewheel(function (evt) {
+    $(svg).mousewheel(function (evt) {
         evt.preventDefault();
         var size = getSize(svg_el), offset = getOffset(svg_el),
             center = screen2svg({x: evt.pageX - offset.left,
                                  y: evt.pageY - offset.top}),
-            scroll = evt.deltaY, factor =  1 + scroll * 0.1,
+            delta = evt.deltaY, factor =  1 + delta * 0.1,
             new_width = size.width * factor, new_height = size.height * factor;
 
         zoom = new_width / svg_width;
 
         setSize(svg_el, new_width, new_height);
         center = svg2screen(center);
-        setOffset(svg_el, evt.pageX - center.x, evt.pageY - center.y);
+        setOffset(svg_el, -(center.x - evt.pageX), -(center.y - evt.pageY));
 
-        events.zoom.dispatch(zoom);
+        events.zoom.dispatch();
     });
 
     // Panning the view
-    $(synoptic_el).on("mousedown", function (evt) {
-        var offset = getOffset(svg_el), $element = $(synoptic_el),
-            start_coords = {x: evt.clientX - offset.left,
-                            y: evt.clientY - offset.top};
+    $(svg).on("mousedown", function (evt) {
+
+        var offset = getOffset(svg_el), $element = $(evt.target),
+            start_coords = {x: evt.screenX, y: evt.screenY};
 
         $element.on("mousemove", function (evt) {
-            setOffset(svg_el, evt.clientX - start_coords.x,
-                      evt.clientY - start_coords.y);
+            var deltaX = evt.screenX - start_coords.x,
+                deltaY = evt.screenY - start_coords.y;
+            setOffset(svg_el, offset.left + deltaX, offset.top + deltaY);
             events.scroll.dispatch();
         });
 
@@ -193,9 +194,6 @@ window.onload = function () {
     });
 
     // Show the SVG when everything is set up
-    $(svg_el).css({visibility: "visible"});
-
-    if (window.TANGO)
-        TANGO.setup();
+    $(svg_el).fadeIn(1000);
 
 };
