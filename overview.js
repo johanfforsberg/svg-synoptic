@@ -177,24 +177,23 @@ window.onload = function () {
 
     // Panning the view
     $(synoptic_el).on("mousedown", function (evt) {
-        var offset = getOffset(svg_el),
-            start_coords = {x: evt.pageX - offset.left,
-                            y: evt.pageY - offset.top};
+        var offset = getOffset(svg_el), $element = $(synoptic_el),
+            start_coords = {x: evt.clientX - offset.left,
+                            y: evt.clientY - offset.top};
 
-        $(synoptic_el).on("mousemove", function (evt) {
-
-            setOffset(svg_el, evt.pageX - start_coords.x,
-                      evt.pageY - start_coords.y);
+        $element.on("mousemove", function (evt) {
+            setOffset(svg_el, evt.clientX - start_coords.x,
+                      evt.clientY - start_coords.y);
             events.scroll.dispatch();
         });
 
-        $(synoptic_el).on("mouseup", function (evt) {
-            $(synoptic_el).off("mousemove mouseup");
+        $element.on("mouseup", function (evt) {
+            $element.off("mousemove mouseup");
         });
     });
 
     // Show the SVG when everything is set up
-    $("#svg2").css({visibility: "visible"});
+    $(svg_el).css({visibility: "visible"});
 
     if (window.TANGO)
         TANGO.setup();
