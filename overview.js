@@ -52,8 +52,8 @@ window.onload = function () {
     }
 
     function setSize(el, w, h) {
-        el.style.width = w + "px";
-        el.style.height = h + "px";
+        el.style.width = Math.round(w) + "px";
+        el.style.height = Math.round(h) + "px";
     }
 
     function getOffset(el) {
@@ -62,8 +62,8 @@ window.onload = function () {
     }
 
     function setOffset(el, x, y) {
-        el.style.left = x + "px";
-        el.style.top = y + "px";
+        el.style.left = Math.round(x) + "px";
+        el.style.top = Math.round(y) + "px";
     }
 
     // convert coordinates from svg to container
@@ -92,8 +92,8 @@ window.onload = function () {
             topleft = svg2overview(screen2svg({x: -offset.left, y: -offset.top})),
             width = scale * view_width / zoom,
             height = scale * view_height / zoom;
-        setOffset(viewRect, Math.round(topleft.x), Math.round(topleft.y));
-        setSize(viewRect, Math.round(width), Math.round(height));
+        setOffset(viewRect, topleft.x, topleft.y);
+        setSize(viewRect, width, height);
     }
 
     // Update which objects are shown depending pon zoom level
@@ -159,19 +159,21 @@ window.onload = function () {
 
     // Zooming the view
     $(svg).mousewheel(function (evt) {
+        
         evt.preventDefault();
-        var size = getSize(svg_el), offset = getOffset(svg_el),
-            center = screen2svg({x: evt.pageX - offset.left,
-                                 y: evt.pageY - offset.top}),
-            delta = evt.deltaY, factor =  1 + delta * 0.1,
-            new_width = size.width * factor, new_height = size.height * factor;
 
+        var size = getSize(svg_el), offset = getOffset(svg_el),
+            screen_pos = {x: evt.clientX + offset.left, y: evt.clientY + offset.top},
+            center = screen2svg({x: evt.clientX, y: evt.clientY}),
+            delta = evt.deltaY, factor =  1 + delta * 0.1,
+            new_width = size.width * factor, 
+            new_height = size.height * factor;
+        
         zoom = new_width / svg_width;
 
         setSize(svg_el, new_width, new_height);
         center = svg2screen(center);
-        setOffset(svg_el, -(center.x - evt.pageX), -(center.y - evt.pageY));
-
+        setOffset(svg_el, screen_pos.x - center.x, screen_pos.y - center.y);
         events.zoom.dispatch();
     });
 
@@ -179,8 +181,9 @@ window.onload = function () {
     $(svg).on("mousedown", function (evt) {
 
         var offset = getOffset(svg_el), $element = $(evt.target),
-            start_coords = {x: evt.screenX, y: evt.screenY};
-
+            start_coords = {x: evt.screenX, y: evt.screenY},
+            orig_evt = evt;
+        
         $element.on("mousemove", function (evt) {
             var deltaX = evt.screenX - start_coords.x,
                 deltaY = evt.screenY - start_coords.y;
