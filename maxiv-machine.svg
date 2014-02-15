@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?xml-stylesheet href="styles.css" type="text/css"?><!-- Created with Inkscape (http://www.inkscape.org/) -->
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -13,45 +13,10 @@
    height="496.06299"
    id="svg3376"
    version="1.1"
-   inkscape:version="0.48+devel r"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="maxiv-machine.svg">
-  <script
-     type="text/ecmascript"
-     id="script4063"><![CDATA[
-  // Connect up the Tango integration point
-  window.onload = function () {
-     window.Tango = window.parent.Tango;
-     Tango.register(document);
-     Tango.console("test");
-  }]]></script>
   <defs
-     id="defs3378">
-    <filter
-       id="outline"
-       x="-0.5"
-       y="-0.5"
-       width="2"
-       height="2"
-       color-interpolation-filters="sRGB">
-      <feMorphology
-         result="offset"
-         in="SourceGraphic"
-         operator="dilate"
-         radius="10"
-         id="feMorphology4039" />
-      <feColorMatrix
-         result="drop"
-         in="offset"
-         type="matrix"
-         values="0 0 0 0 0                  0 0 0 0 0                  0 0 0 0 0                  0  0  0  0.25  0"
-         id="feColorMatrix4041" />
-      <feBlend
-         in="SourceGraphic"
-         in2="drop"
-         mode="normal"
-         id="feBlend4043" />
-    </filter>
-  </defs>
+     id="defs3378" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -60,8 +25,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="10.182338"
-     inkscape:cx="130.40597"
-     inkscape:cy="430.74907"
+     inkscape:cx="114.90315"
+     inkscape:cy="430.15981"
      inkscape:document-units="mm"
      inkscape:current-layer="layer3"
      showgrid="false"
@@ -93,7 +58,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -102,24 +67,24 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-0.56670976,-559.07728)"
-     style="display:inline;pointer-events:visiblePainted">
-    <!-- <rect -->
-    <!--    style="opacity:0;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" -->
-    <!--    id="rect4257" -->
-    <!--    width="302.22223" -->
-    <!--    height="216.66666" -->
-    <!--    x="-214.44443" -->
-    <!--    y="218.8889" -->
-    <!--    transform="translate(0.56670976,480.6958)" -->
-    <!--    rx="10" -->
-    <!--    ry="10" /> -->
+     style="display:inline">
+    <rect
+       style="opacity:0;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect4257"
+       width="302.22223"
+       height="216.66666"
+       x="-214.44443"
+       y="218.8889"
+       transform="translate(0.56670976,480.6958)"
+       rx="10"
+       ry="10" />
     <g
        id="g5737"
        style="stroke:#b3b3b3;stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
        transform="translate(8.8888889,61.111111)">
       <path
          transform="translate(2.788932,484.02913)"
-         d="M 838.8889,256.66669 A 174.44444,174.44444 0 0 1 664.44446,431.11113 174.44444,174.44444 0 0 1 490.00002,256.66669 174.44444,174.44444 0 0 1 664.44446,82.222244 174.44444,174.44444 0 0 1 838.8889,256.66669 Z"
+         d="m 838.8889,256.66669 a 174.44444,174.44444 0 1 1 -348.88888,0 174.44444,174.44444 0 1 1 348.88888,0 z"
          sodipodi:ry="174.44444"
          sodipodi:rx="174.44444"
          sodipodi:cy="256.66669"
@@ -141,7 +106,7 @@
          sodipodi:cy="256.66669"
          sodipodi:rx="174.44444"
          sodipodi:ry="174.44444"
-         d="M 838.8889,256.66669 A 174.44444,174.44444 0 0 1 664.44446,431.11113 174.44444,174.44444 0 0 1 490.00002,256.66669 174.44444,174.44444 0 0 1 664.44446,82.222244 174.44444,174.44444 0 0 1 838.8889,256.66669 Z"
+         d="m 838.8889,256.66669 a 174.44444,174.44444 0 1 1 -348.88888,0 174.44444,174.44444 0 1 1 348.88888,0 z"
          transform="matrix(0.16401273,0,0,0.16401273,310.47825,553.04366)" />
     </g>
   </g>
@@ -150,35 +115,26 @@
      id="layer3"
      inkscape:label="zoom1">
     <rect
-       style="color:#000000;fill:#00ff00;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994000000003;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;"
+       style="color:#000000;fill:#00ff00;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994000000003;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect5781"
        width="27.007551"
        height="18.070507"
        x="59.416615"
-       y="59.620964">
-      <desc
-         id="desc4084">device=sys/test/1</desc>
-    </rect>
+       y="59.620964" />
     <rect
        y="59.620964"
        x="110.58365"
        height="18.070507"
        width="27.007551"
        id="rect5783"
-       style="color:#000000;fill:#00ff00;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate">
-      <desc
-         id="desc4086">device=sys/test/2</desc>
-    </rect>
+       style="color:#000000;fill:#00ff00;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     <rect
        style="color:#000000;fill:#00ff00;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect5785"
        width="27.007551"
        height="18.070507"
        x="161.16142"
-       y="59.620964">
-      <desc
-         id="desc4088">device=sys/test/3</desc>
-    </rect>
+       y="59.620964" />
   </g>
   <g
      inkscape:groupmode="layer"

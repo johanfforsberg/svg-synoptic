@@ -1,23 +1,7 @@
-var Tango;
+var Stuff = {
 
-(function () {
-
-
-    Tango = {
-        register: register,
-        select: select,
-        selectDevice: selectDevice,
-        toggle: toggle,
-        setStatus: setStatus,
-
-        console: function (s) {console.log("Tango console: " + s);}
-    };
-
-    var svg;
-
-    function register (el) {
-        //var svg = el; document.getElementById("svg2").contentDocument;
-        svg = el;
+    findDevices: function () {
+        var svg = document.getElementById("svg2").contentDocument;
         var descs =  Array.prototype.slice.call(svg.querySelectorAll("desc"));
         console.log(descs);
         descs.forEach(function (desc) {
@@ -27,21 +11,19 @@ var Tango;
                     parent = desc.parentNode;
                 console.log("found device: " + devname +
                             " (" + parent.getAttribute("id") + ")");
-                window.TANGO && TANGO.registerDevice(devname);
+                TANGO.registerDevice(devname);
                 //parent.classList.add(devname);
-                if (!parent.getAttribute("label"))
-                    parent.setAttribute("label", devname);
                 if (!parent.onclick)
                     parent.onclick = function (evt) {
-                        window.TANGO && TANGO.select(devname);
+                        TANGO.select(devname);
                     };
             }
         });
-    }
+    },
 
-    function getElementsByDeviceName (devname) {
+    getElementsByDeviceName: function (devname) {
         var els = [];
-        //var svg = document.getElementById("svg2").contentDocument;
+        var svg = document.getElementById("svg2").contentDocument;
         var descs =  Array.prototype.slice.call(svg.querySelectorAll("desc"));
         descs.forEach(function (desc) {
             var result = /device=(.*)/.exec(desc.textContent);
@@ -50,19 +32,20 @@ var Tango;
             }
         });
         return els;
-    }
+    },
 
-    function findParentDevice (el) {
+
+    findParentDevice: function (el) {
         while (el) {
-            var devname = getDeviceName(el);
+            var devname = Stuff.getDeviceName(el);
             if (devname)
                 return devname;
             el = el.parentNode;
         }
         return null;
-    }
+    },
 
-    function getDeviceName (el) {
+    getDeviceName: function (el) {
         var desc = el.querySelector("desc");
         if (desc) {
             var result = /device=(.*)/.exec(desc.textContent);
@@ -70,21 +53,21 @@ var Tango;
                 return result[1];
         }
         return null;
-    }
+    },
 
-    function toggle (evt) {
+    toggle: function (evt) {
         evt.stopPropagation();
         var target = evt.currentTarget;  // makes sure we get <g> element if the onclick is on it
-        var devname = findParentDevice(target);
+        var devname = Stuff.findParentDevice(target);
         console.log("toggle", devname);
         if (devname)
-            window.TANGO && TANGO.toggle(devname);
+            TANGO.toggle(devname);
         else
             console.log("no device for element " + target.getAttribute("id"));
         return false;
-    }
+    },
 
-    function getBBoxAsRectElement (elm) {
+    getBBoxAsRectElement: function (elm){
         var bb = elm.getBBox();
         var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         console.log("bbrect " + bb.width + ", " + bb.height);
@@ -97,48 +80,42 @@ var Tango;
         rect.setAttribute("ry", 2*padding);
         rect.setAttribute("class", "select");
         return rect;
-    }
+    },
 
-    function removeElementsOfClass (cls) {
+    removeElementsOfClass: function (cls) {
         var els = Array.prototype.slice.call(
-            svg.getElementsByClassName("select"));
+            document.getElementsByClassName("select"));
         els.forEach(function (el) {
             el.parentNode.removeChild(el);
         });
-    }
+    },
 
-    function select(ev) {
-        var devName = getDeviceName(ev.target);
-        console.log("select " + devName);
-        TANGO.select(devName);
-    };
+    select: function (devname) {
+        console.log("select", devname);
+        var elements = Stuff.getElementsByDeviceName(devname);
+        Stuff.removeElementsOfClass("select");
 
-    function selectDevice (devname) {
-        console.log("selectDevice", devname);
-        removeElementsOfClass("select");
-
-        var elements = getElementsByDeviceName(devname);
         elements.forEach(function (el) {
-            // el.style.filter="url(#outline)";
-            var bbrect = getBBoxAsRectElement(el);
+            //el.style.filter="url(#outline)";
+            var bbrect = Stuff.getBBoxAsRectElement(el);
             el.parentNode.insertBefore(bbrect, el);
         });
-    }
+    },
 
-    function setStatus (devname, status) {
+    setStatus: function (devname, status) {
         console.log("setStatus " + devname + " " + status);
-        var els = getElementsByDeviceName(devname);
+        var els = Stuff.getElementsByDeviceName(devname);
         els.forEach(function (el) {
             console.log("id: " + el.getAttribute("id"));
             el.setAttribute("class", "status-" + status);
             console.log(el.getAttribute("class"));
         });
-        runAnim(devname, status);
-    }
+        Stuff.runAnim(devname, status);
+    },
 
-    function runAnim (device, animName) {
+    runAnim: function (device, animName) {
         console.log("runAnim " + device + " " + animName);
-        var els = getElementsByDeviceName(device);
+        var els = Stuff.getElementsByDeviceName(device);
         els.forEach(function (el) {
             console.log("animating #" + el.id + " " + animName);
             var anim = Array.prototype.slice.call(el.querySelectorAll(
@@ -146,5 +123,4 @@ var Tango;
             anim.forEach(function (a) {a.beginElement();});
         });
     }
-
-})();
+};

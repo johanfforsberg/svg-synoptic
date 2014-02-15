@@ -39,19 +39,19 @@ class TangoSomething(QtCore.QObject):
     @QtCore.pyqtSlot()
     def setup(self):
         if self.activate_devices:
-            self.frame.evaluateJavaScript("Tango.findDevices()")
+            self.frame.evaluateJavaScript("Stuff.findDevices()")
 
     @QtCore.pyqtSlot(str)
     def select(self, devname):
         print "select", devname
         if not devname == self.selected_device:
-            self.frame.evaluateJavaScript("Tango.selectDevice('%s')" % devname)
+            self.frame.evaluateJavaScript("Stuff.select('%s')" % devname)
             self.selected_device = devname
 
     @QtCore.pyqtSlot(str)
     def toggle(self, devname):
         direction = "OFF" if self._devices[devname] == "ON" else "ON"
-        self.frame.evaluateJavaScript("Tango.runAnim('%s', '%s')" %
+        self.frame.evaluateJavaScript("Stuff.runAnim('%s', '%s')" %
                                       (devname, direction))
         self.set_status(devname, direction)
 
@@ -62,7 +62,7 @@ class TangoSomething(QtCore.QObject):
 
     def set_status(self, devname, status):
         if status != self._devices[devname]:
-            self.frame.evaluateJavaScript("Tango.setStatus('%s', '%s')" %
+            self.frame.evaluateJavaScript("Stuff.setStatus('%s', '%s')" %
                                           (devname, status))
             self._devices[devname] = status
 
@@ -97,6 +97,27 @@ class ZoomingWebView(QWebView):
 
     def contentsSizeChanged(self, event):
         print(event)
+
+
+class WorkThread(QtCore.QThread):
+
+    signal = QtCore.pyqtSignal([str, str])
+
+    def __init__(self, tango, devices, interval=1.0):
+        self.tango = tango
+        self.devices = devices
+        self.interval = interval
+        QtCore.QThread.__init__(self)
+
+    def run(self):
+        on = False
+        while True:
+            time.sleep(self.interval)
+            new_status = "ON" if on else "OFF"
+            if self.tango._devices:
+                self.signal.emit(random.choice(self.tango._devices.keys()),
+                                 new_status)
+            on = not on
 
 
 class SynopticWidget(QWidget):
@@ -158,33 +179,13 @@ class SynopticWidget(QWidget):
         return view
 
 
-class WorkThread(QtCore.QThread):
-
-    signal = QtCore.pyqtSignal([str, str])
-
-    def __init__(self, tango, interval=1.0):
-        self.tango = tango
-        self.interval = interval
-        QtCore.QThread.__init__(self)
-
-    def run(self):
-        on = False
-        while True:
-            time.sleep(self.interval)
-            new_status = "ON" if on else "OFF"
-            if self.tango._devices:
-                self.signal.emit(random.choice(self.tango._devices.keys()),
-                                 new_status)
-            on = not on
-
-
-
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     synoptic = SynopticWidget()
 
-    thread = WorkThread(synoptic.tango)
+    thread = WorkThread(synoptic.tango,
+                        ["fisk/och/kex", "hej/med/ost", "another/fake/device"])
     thread.signal.connect(synoptic.tango.set_status)
     thread.start()
 
