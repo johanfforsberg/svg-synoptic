@@ -26,7 +26,12 @@ from PyQt4.QtWebKit import QWebView, QWebPage
 
 class TangoSomething(QtCore.QObject):
 
-    """Interface between webview and Tango"""
+    """Interface between webview and Tango (doesn't really involve
+    Tango yet, just python for now.)
+
+    All methods decorated with "pyqtSlot" on this class can be called
+    from JS.
+    """
 
     def __init__(self, frame, parent=None, activate_devices=True):
         self.frame = frame
@@ -39,19 +44,19 @@ class TangoSomething(QtCore.QObject):
     @QtCore.pyqtSlot()
     def setup(self):
         if self.activate_devices:
-            self.frame.evaluateJavaScript("Stuff.findDevices()")
+            self.frame.evaluateJavaScript("Tango.findDevices()")
 
     @QtCore.pyqtSlot(str)
     def select(self, devname):
         print "select", devname
         if not devname == self.selected_device:
-            self.frame.evaluateJavaScript("Stuff.select('%s')" % devname)
+            self.frame.evaluateJavaScript("Tango.selectDevice('%s')" % devname)
             self.selected_device = devname
 
     @QtCore.pyqtSlot(str)
     def toggle(self, devname):
         direction = "OFF" if self._devices[devname] == "ON" else "ON"
-        self.frame.evaluateJavaScript("Stuff.runAnim('%s', '%s')" %
+        self.frame.evaluateJavaScript("Tango.runAnim('%s', '%s')" %
                                       (devname, direction))
         self.set_status(devname, direction)
 
@@ -62,7 +67,7 @@ class TangoSomething(QtCore.QObject):
 
     def set_status(self, devname, status):
         if status != self._devices[devname]:
-            self.frame.evaluateJavaScript("Stuff.setStatus('%s', '%s')" %
+            self.frame.evaluateJavaScript("Tango.setStatus('%s', '%s')" %
                                           (devname, status))
             self._devices[devname] = status
 
@@ -79,33 +84,52 @@ class LoggingWebPage(QWebPage):
         self.logger = logger
 
     def javaScriptConsoleMessage(self, msg, lineNumber, sourceID):
-        self.logger.warn("JsConsole(%s:%d):\n\t%s" % (sourceID, lineNumber, msg))
+        self.logger.warn("JsConsole(%s:%d):\n\t%s" %
+                         (sourceID, lineNumber, msg))
 
 
-class ZoomingWebView(QWebView):
+class SynopticWidget(QWidget):
 
-    def __init__(self, *args, **kwargs):
-        super(ZoomingWebView, self).__init__(*args, **kwargs)
-        # Prevent the reload menu from opening. It will be useless anyway.
-        self.setContextMenuPolicy(QtCore.Qt.PreventContextMenu)
+    def __init__(self, url):
+        super(SynopticWidget, self).__init__()
+        self.url = url
+        self.setup_ui()
 
-    # def wheelEvent(self, event):
-    #     frame = self.page().mainFrame()
-    #     print event.delta()
-    #     scale = 1 + 0.1 * (event.delta() / 120)
-    #     frame.setZoomFactor(frame.zoomFactor() * scale)
+    def setup_ui(self):
+        hbox = QtGui.QHBoxLayout(self)
+        hbox.setContentsMargins(0, 0, 0, 0)
+        hbox.layout().setContentsMargins(0, 0, 0, 0)
+        hbox.addWidget(self.create_view())
+        self.setLayout(hbox)
 
-    def contentsSizeChanged(self, event):
-        print(event)
+    def create_view(self, use_tango=True):
+        view = QWebView(self)
+        view.setPage(LoggingWebPage())
+
+        svg = QUrl(self.url)
+        view.load(svg)
+
+        frame = view.page().mainFrame()
+        # frame.setScrollBarPolicy(Qt.Horizontal, Qt.ScrollBarAlwaysOn)
+        # frame.setScrollBarPolicy(Qt.Vertical, Qt.ScrollBarAlwaysOn)
+
+        if use_tango:
+            self.tango = TangoSomething(frame)
+            # Inject TangoSomething into the JS global namespace as TANGO
+            frame.addToJavaScriptWindowObject('TANGO', self.tango)
+        return view
 
 
 class WorkThread(QtCore.QThread):
 
+    """Does some random activating/deactivating of devices, just to
+    simulate some action...
+    """
+
     signal = QtCore.pyqtSignal([str, str])
 
-    def __init__(self, tango, devices, interval=1.0):
+    def __init__(self, tango, interval=1.0):
         self.tango = tango
-        self.devices = devices
         self.interval = interval
         QtCore.QThread.__init__(self)
 
@@ -120,75 +144,19 @@ class WorkThread(QtCore.QThread):
             on = not on
 
 
-class SynopticWidget(QWidget):
-
-    def __init__(self):
-        super(SynopticWidget, self).__init__()
-        # self.create_view()
-        # self.create_view(False)
-        self.setup_ui()
-
-    def setup_ui(self):
-        hbox = QtGui.QHBoxLayout(self)
-        hbox.setContentsMargins(0, 0, 0, 0)
-        hbox.layout().setContentsMargins(0, 0, 0, 0)
-
-        top = QtGui.QFrame(self)
-        #top.setFrameShape(QtGui.QFrame.StyledPanel)
-        topbox = QtGui.QHBoxLayout(self)
-        topbox.setContentsMargins(0, 0, 0, 0)
-        topbox.layout().setContentsMargins(0, 0, 0, 0)
-
-        top.setLayout(topbox)
-        top.setContentsMargins(0, 0, 0, 0)
-        top.layout().setContentsMargins(0, 0, 0, 0)
-        topbox.addWidget(self.create_view())
-
-        # bottom = QtGui.QFrame(self)
-        # #bottom.setFrameShape(QtGui.QFrame.StyledPanel)
-        # bottombox = QtGui.QHBoxLayout(self)
-        # bottombox.setContentsMargins(0, 0, 0, 0)
-        # bottombox.layout().setContentsMargins(0, 0, 0, 0)
-
-        # bottom.setLayout(bottombox)
-        # bottom.setContentsMargins(0, 0, 0, 0)
-        # bottom.layout().setContentsMargins(0, 0, 0, 0)
-        # bottombox.addWidget(self.create_view(False))
-
-        splitter = QtGui.QSplitter(QtCore.Qt.Vertical)
-        splitter.addWidget(top)
-        # splitter.addWidget(bottom)
-
-        hbox.addWidget(splitter)
-        self.setLayout(hbox)
-
-    def create_view(self, use_tango=True):
-        view = ZoomingWebView(self)
-        view.setPage(LoggingWebPage())
-
-        svg = QUrl(sys.argv[1])
-        view.load(svg)
-
-        frame = view.page().mainFrame()
-        # frame.setScrollBarPolicy(Qt.Horizontal, Qt.ScrollBarAlwaysOn)
-        # frame.setScrollBarPolicy(Qt.Vertical, Qt.ScrollBarAlwaysOn)
-
-        if use_tango:
-            self.tango = TangoSomething(frame)
-            frame.addToJavaScriptWindowObject('TANGO', self.tango)
-        return view
-
-
 if __name__ == '__main__':
+
+    if len(sys.argv) != 2:
+        sys.exit("Please give a html file as argument.")
+
     app = QApplication(sys.argv)
 
-    synoptic = SynopticWidget()
+    synoptic = SynopticWidget(sys.argv[1])
 
-    thread = WorkThread(synoptic.tango,
-                        ["fisk/och/kex", "hej/med/ost", "another/fake/device"])
+    thread = WorkThread(synoptic.tango)
     thread.signal.connect(synoptic.tango.set_status)
     thread.start()
 
-    synoptic.show();
+    synoptic.show()
 
     app.exec_()
